@@ -38,7 +38,7 @@ export const actions = {
             .where(eq(users.email, email.toString()))
             .limit(1);
 
-        if ( user.length != 0) {
+        if ( user.length !== 0) {
             throw error(404, "Email already registered");
         }
 
