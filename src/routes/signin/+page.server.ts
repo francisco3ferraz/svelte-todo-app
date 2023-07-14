@@ -68,7 +68,7 @@ export const actions = {
             }
         )
 
-        throw redirect(301, "/profile");
+        throw redirect(301, "/");
     
     }
 }

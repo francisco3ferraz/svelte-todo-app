@@ -23,11 +23,29 @@ export const load = async (event: ServerLoadEvent) => {
             .from(todos)
             .where(eq(todos.user_id, currentUser.id));
     
-    return { availableTodos, currentUser };
+    return { availableTodos };
 };
 
 export const actions = {
-    create: async (event) => {
+    create: async ({ request, fetch, cookies }) => {
+        const data = await request.formData();
+        const todo = data.get("todo") || "";
+
+        const token = cookies.get("auth_token");
+        if (!token) {
+          throw redirect(301, "/sign-in");
+        }
+
+        const currentUser = await verifyJWT(token);
+
+        await database.insert(todos).values({
+            title: todo.toString(),
+            user_id: currentUser.id,
+            completed: false,
+        });
+
+        return { success: true };
+        
     },
     delete: async (event) => { 
     },
