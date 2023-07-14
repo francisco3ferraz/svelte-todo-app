@@ -5,6 +5,10 @@ import { error, redirect } from '@sveltejs/kit';
 import bcrypt from 'bcryptjs';
 import { eq } from 'drizzle-orm';
 
+export const config = {
+    runtime: "nodejs18.x",
+};
+
 export const load = async (event) => {
 
     const token = event.cookies.get("auth_token");

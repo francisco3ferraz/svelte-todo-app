@@ -5,12 +5,16 @@ import { eq } from 'drizzle-orm';
 import bcrypt from 'bcryptjs'
 import { createJWT } from '$lib/server/jwt.js';
 
+export const config = {
+    runtime: "nodejs18.x",
+};
+
 export const load = async (event: ServerLoadEvent) => {
 
     const token = event.cookies.get("auth_token");
   
     if (token && token !== "") {
-      throw redirect(301, "/");
+        throw redirect(301, "/");
     }
 };
 
