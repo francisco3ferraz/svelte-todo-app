@@ -1,11 +1,11 @@
 import { database } from '$lib/server/db.js';
 import { users } from '$lib/server/schema.js';
-import { error, redirect } from '@sveltejs/kit';
+import { error, redirect, type ServerLoad, type ServerLoadEvent } from '@sveltejs/kit';
 import { eq } from 'drizzle-orm';
 import bcrypt from 'bcryptjs'
-import { createAuthJWT } from '$lib/server/jwt.js';
+import { createJWT } from '$lib/server/jwt.js';
 
-export const load = async (event) => {
+export const load = async (event: ServerLoadEvent) => {
 
     const token = event.cookies.get("auth_token");
   
@@ -19,6 +19,7 @@ export const actions = {
         const data = await event.request.formData();
         const email = data.get("email");
         const password = data.get("password");
+
 
         if (!email || !password) {
             throw error(400, "Must provide an email and password")
@@ -49,7 +50,7 @@ export const actions = {
             throw error(400, "Incorrect password.");
         }
 
-        const token = await createAuthJWT({
+        const token = await createJWT({
             firstName: user[0].first_name,
             lastName: user[0].last_name,
             email: user[0].email,

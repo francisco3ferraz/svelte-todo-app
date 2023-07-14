@@ -1,6 +1,6 @@
-import { redirect } from '@sveltejs/kit';
+import { redirect, type ServerLoadEvent } from '@sveltejs/kit';
 
-export const load = async (event) => {
+export const load = async (event: ServerLoadEvent) => {
 
     const token = event.cookies.set("auth_token", "");
   

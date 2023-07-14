@@ -1,5 +1,5 @@
 import { database } from '$lib/server/db.js';
-import { createAuthJWT } from '$lib/server/jwt.js';
+import { createJWT } from '$lib/server/jwt.js';
 import { users } from '$lib/server/schema.js';
 import { error, redirect } from '@sveltejs/kit';
 import bcrypt from 'bcryptjs';
@@ -52,7 +52,7 @@ export const actions = {
                 password: hashedPassword,
             }).returning({ insertedId: users.id });;
         
-        const token = await createAuthJWT({
+        const token = await createJWT({
             firstName: first_name.toString(),
             lastName: last_name.toString(),
             email: email.toString(),

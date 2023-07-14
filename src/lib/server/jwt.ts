@@ -9,14 +9,14 @@ type JWTPayload = {
     id: number;
 }
 
-export const createAuthJWT = async (data: JWTPayload) => {
+export const createJWT = async (data: JWTPayload) => {
     const jwt = await new jose.SignJWT(data)
         .setProtectedHeader({alg: "HS256"})
         .sign(new TextEncoder().encode(JWT_SECRET));
     return jwt;
 }
 
-export const verifyAuthJWT = async (token: string) => {
+export const verifyJWT = async (token: string) => {
     try {
         const { payload } = await jose.jwtVerify(
             token,

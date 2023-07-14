@@ -1,7 +1,7 @@
-import { verifyAuthJWT } from '$lib/server/jwt.js';
-import { redirect } from '@sveltejs/kit';
+import { verifyJWT } from '$lib/server/jwt.js';
+import { redirect, type ServerLoadEvent } from '@sveltejs/kit';
 
-export const load = async (event) => {
+export const load = async (event: ServerLoadEvent) => {
 
     const token = event.cookies.get("auth_token");
   
@@ -9,5 +9,5 @@ export const load = async (event) => {
       throw redirect(301, "/");
     }
 
-    return verifyAuthJWT(token);
+    return verifyJWT(token);
 };
