@@ -27,13 +27,13 @@ export const load = async (event: ServerLoadEvent) => {
 };
 
 export const actions = {
-    create: async ({ request, fetch, cookies }) => {
+    create: async ({ request, cookies }) => {
         const data = await request.formData();
         const todo = data.get("todo") || "";
 
         const token = cookies.get("auth_token");
         if (!token) {
-          throw redirect(301, "/sign-in");
+          throw redirect(301, "/signin");
         }
 
         const currentUser = await verifyJWT(token);
@@ -47,8 +47,40 @@ export const actions = {
         return { success: true };
         
     },
-    delete: async (event) => { 
+    delete: async ({ request, cookies }) => { 
+        const data = await request.formData();
+        const id = data.get("id") || "";
+
+        const token = cookies.get("auth_token");
+        if (!token) {
+          throw redirect(301, "/signin");
+        }
+
+        await verifyJWT(token);
+
+        await database
+            .delete(todos)
+            .where(eq(todos.id, parseInt(id.toString())))
+
+        return { success: true };
     },
-    complete: async (event) => {
+    complete: async ({request, cookies}) => {
+        const data = await request.formData();
+        const id = data.get("id") || "";
+
+        const token = cookies.get("auth_token");
+        if (!token) {
+          throw redirect(301, "/signin");
+        }
+
+        await verifyJWT(token);
+
+        await database
+            .update(todos)
+            .set({ completed: true })
+            .where(eq(todos.id, parseInt(id.toString())));
+
+        return { success: true };
+
     }
 }
